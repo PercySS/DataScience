@@ -87,7 +87,7 @@ def plot_superchart(e_agents, soft_agents):
 
 def main():
 
-    epsilon = 0.1
+    epsilon = 0.5
     tau = 0.6
     
     if (len(sys.argv) < 6): 
@@ -115,6 +115,8 @@ def main():
     for _ in range(episodes):
         # i make a world
         world = bandit.BanditWorld(machines, levers, std_dev)
+
+        world.print_true_means()
     
         # i make two agents with different algorithms
         agentEpsilon = agent.Agent(actions, machines, levers, epsilon, -1)
@@ -135,11 +137,15 @@ def main():
         
         epsilon_histories.append(agentEpsilon.choice_per_step)
         softmax_histories.append(agentSoftmax.choice_per_step)
+
+        agentEpsilon.print_estimations(machines, levers)
+        agentSoftmax.print_estimations(machines, levers)
         
         del agentEpsilon
         del agentSoftmax
         del world
         
+    
     
     episodes_range = np.arange(1, len(e_agents)+1)
             
